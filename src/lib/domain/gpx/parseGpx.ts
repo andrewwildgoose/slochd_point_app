@@ -60,11 +60,20 @@ throw new Error(`Unclosed tag <${stack[stack.length - 1]}>`);
 }
 
 function extractFirstTagText(input: string, tagNames: string[]): string | undefined {
-for (const tagName of tagNames) {
-const regex = new RegExp(`<${tagName}\\b[^>]*>[\\s\\S]*?<name\\b[^>]*>([\\s\\S]*?)<\\/name>[\\s\\S]*?<\\/${tagName}>`, 'i');
-const match = input.match(regex);
-if (match) {
-const name = match[1].trim();
+	const nameRegexByTagName: Record<string, RegExp> = {
+		trk: /<trk\b[^>]*>[\s\S]*?<name\b[^>]*>([\s\S]*?)<\/name>[\s\S]*?<\/trk>/i,
+		rte: /<rte\b[^>]*>[\s\S]*?<name\b[^>]*>([\s\S]*?)<\/name>[\s\S]*?<\/rte>/i
+	};
+
+	for (const tagName of tagNames) {
+		const regex = nameRegexByTagName[tagName];
+		if (!regex) {
+			continue;
+		}
+
+		const match = input.match(regex);
+		if (match) {
+			const name = match[1].trim();
 if (name.length > 0) {
 return name;
 }
@@ -125,7 +134,7 @@ throw new Error('Invalid GPX: missing <gpx> root element');
 }
 
 const points: ParsedRoutePoint[] = [];
-const pointPattern = /<(trkpt|rtept)\b([^>]*?)(?:\/>|>([\s\S]*?)<\/(?:trkpt|rtept)>)/gi;
+	const pointPattern = /<(trkpt|rtept)\b([^>]*?)(?:\/>|>([\s\S]*?)<\/\1>)/gi;
 let match: RegExpExecArray | null;
 
 while ((match = pointPattern.exec(normalizedInput)) !== null) {

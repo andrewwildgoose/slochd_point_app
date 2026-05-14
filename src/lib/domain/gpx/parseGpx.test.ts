@@ -26,14 +26,23 @@ points: [
 });
 });
 
-it('throws a clear error for invalid XML input', () => {
-const invalidGpx = '<gpx><trk><trkseg><trkpt lat="56" lon="-4"></trkseg></trk></gpx>';
-expect(() => parseGpx(invalidGpx)).toThrow('Invalid GPX XML');
-});
+	it('throws a clear error for invalid XML input', () => {
+		const invalidGpx = '<gpx><trk><trkseg><trkpt lat="56" lon="-4"></trkseg></trk></gpx>';
+		expect(() => parseGpx(invalidGpx)).toThrow('Invalid GPX XML');
+	});
 
-it('throws a clear error when no usable points are present', () => {
-const noPointsGpx = `
-<gpx version="1.1" creator="test">
+	it('throws a clear error for empty GPX input', () => {
+		expect(() => parseGpx('  ')).toThrow('GPX input must be a non-empty string');
+	});
+
+	it('throws a clear error for non-GPX XML input', () => {
+		const notGpx = '<root><item>test</item></root>';
+		expect(() => parseGpx(notGpx)).toThrow('Invalid GPX: missing <gpx> root element');
+	});
+
+	it('throws a clear error when no usable points are present', () => {
+		const noPointsGpx = `
+			<gpx version="1.1" creator="test">
 <trk><name>No points</name><trkseg></trkseg></trk>
 </gpx>
 `;
