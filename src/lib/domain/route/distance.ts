@@ -62,6 +62,7 @@ export function calculateCumulativeRouteDistancesMeters(route: RoutePoint[]): nu
 }
 
 export function calculateTotalRouteDistanceMeters(route: RoutePoint[]): number {
+	// Routes with fewer than two points contain no traversable segment.
 	if (route.length < 2) {
 		return 0;
 	}
