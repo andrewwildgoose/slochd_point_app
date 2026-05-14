@@ -24,7 +24,10 @@ function assertValidRoutePoint(point: RoutePoint, index: number): void {
 export function calculateSegmentDistanceMeters(start: RoutePoint, end: RoutePoint): number {
 	assertValidRoutePoint(start, 0);
 	assertValidRoutePoint(end, 1);
+	return calculateHaversineDistanceMeters(start, end);
+}
 
+function calculateHaversineDistanceMeters(start: RoutePoint, end: RoutePoint): number {
 	const startLatRadians = toRadians(start.lat);
 	const endLatRadians = toRadians(end.lat);
 	const latitudeDeltaRadians = toRadians(end.lat - start.lat);
@@ -51,7 +54,7 @@ export function calculateCumulativeRouteDistancesMeters(route: RoutePoint[]): nu
 
 	for (let i = 1; i < route.length; i += 1) {
 		assertValidRoutePoint(route[i], i);
-		const segmentDistance = calculateSegmentDistanceMeters(route[i - 1], route[i]);
+		const segmentDistance = calculateHaversineDistanceMeters(route[i - 1], route[i]);
 		cumulativeDistances[i] = cumulativeDistances[i - 1] + segmentDistance;
 	}
 
