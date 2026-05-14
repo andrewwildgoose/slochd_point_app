@@ -19,11 +19,11 @@ export interface SlochdPointOnRoute {
 	lon: number;
 	/** Elevation of the slochd point, when available. */
 	ele?: number;
-	/** Distance from the route start to the slochd point, in metres. */
+	/** Distance from the route start to the slochd point, in meters. */
 	distanceFromStartMeters: number;
 	/** Miles completed from the route start to the slochd point. */
 	milesCompleted: number;
-	/** Kilometres remaining from the slochd point to the route end. */
+	/** Kilometers remaining from the slochd point to the route end. */
 	kilometersRemaining: number;
 	/** Fraction of the total route distance covered at the slochd point (0–1). */
 	percentThroughRoute: number;

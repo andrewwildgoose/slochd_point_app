@@ -1,5 +1,7 @@
 const EARTH_RADIUS_METERS = 6_371_000;
 
+const toRadians = (deg: number) => (deg * Math.PI) / 180;
+
 export interface RoutePoint {
 	lat: number;
 	lon: number;
@@ -11,16 +13,14 @@ export interface RoutePointWithDistance extends RoutePoint {
 }
 
 /**
- * Returns the great-circle distance in metres between two coordinate pairs
+ * Returns the great-circle distance in meters between two coordinate pairs
  * using the Haversine formula.
  */
 export function haversineDistanceMeters(a: RoutePoint, b: RoutePoint): number {
-	const toRad = (deg: number) => (deg * Math.PI) / 180;
-
-	const dLat = toRad(b.lat - a.lat);
-	const dLon = toRad(b.lon - a.lon);
-	const lat1 = toRad(a.lat);
-	const lat2 = toRad(b.lat);
+	const dLat = toRadians(b.lat - a.lat);
+	const dLon = toRadians(b.lon - a.lon);
+	const lat1 = toRadians(a.lat);
+	const lat2 = toRadians(b.lat);
 
 	const sinHalfDLat = Math.sin(dLat / 2);
 	const sinHalfDLon = Math.sin(dLon / 2);
@@ -32,7 +32,7 @@ export function haversineDistanceMeters(a: RoutePoint, b: RoutePoint): number {
 }
 
 /**
- * Attaches a running cumulative distance (in metres) to each route point.
+ * Attaches a running cumulative distance (in meters) to each route point.
  * The first point always has `cumulativeDistanceMeters === 0`.
  */
 export function buildCumulativeDistances(points: RoutePoint[]): RoutePointWithDistance[] {
